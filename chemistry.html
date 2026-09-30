@@ -48,10 +48,11 @@
     <h3>🎮 Chemistry Games</h3>
     <p>Test your Chemistry knowledge while playing games!</p>
     <a href="minesweeper.html">Play Chemistry Games →</a>
-</div><!DOCTYPE html>
+</div>
+    <!DOCTYPE html>
 <html>
 <head>
-    <title>Study Minesweeper - Big Moe Studying</title>
+    <title>Chemistry Minesweeper - Big Moe Studying</title>
 
     <style>
         body {
@@ -145,11 +146,6 @@
             color: white;
         }
 
-        .flagged {
-            background-color: #FFD700;
-            color: #001f3f;
-        }
-
         #questionBox {
             display: none;
             background-color: white;
@@ -189,6 +185,10 @@
             color: #FFD700;
         }
 
+        #lives {
+            color: #FFD700;
+        }
+
         .back {
             display: inline-block;
             margin-top: 25px;
@@ -224,25 +224,13 @@
 
 <body>
 
-    <h1>💣 Study Minesweeper</h1>
+    <h1>💣 Chemistry Minesweeper</h1>
 
-    <p>Answer educational questions while playing Minesweeper!</p>
+    <p>
+        Answer a Chemistry question correctly before you can make a move!
+    </p>
 
     <div class="controls">
-
-        <label for="subject">Choose a subject:</label>
-
-        <select id="subject">
-            <option value="chemistry">Chemistry</option>
-            <option value="algebra">Algebra 2</option>
-            <option value="history">AP Modern World History</option>
-            <option value="literature">AP Literature & Composition</option>
-            <option value="entrepreneurship">Entrepreneurship & Excel</option>
-            <option value="digital">Digital Design</option>
-            <option value="theology">Theology</option>
-        </select>
-
-        <br>
 
         <label for="difficulty">Difficulty:</label>
 
@@ -261,9 +249,13 @@
     <div id="gameInfo">
 
         <span>💣 Mines: <span id="mineCount">0</span></span>
+
         &nbsp;&nbsp;|&nbsp;&nbsp;
+
         <span>⭐ Score: <span id="score">0</span></span>
+
         &nbsp;&nbsp;|&nbsp;&nbsp;
+
         <span>❤️ Lives: <span id="lives">3</span></span>
 
     </div>
@@ -280,279 +272,84 @@
 
     </div>
 
-    <a class="back" href="index.html">← Back to Home</a>
+    <a class="back" href="chemistry.html">
+        ← Back to Chemistry
+    </a>
 
 
 <script>
 
-const questionBanks = {
+const elements = [
 
-    chemistry: [
+    { name: "Hydrogen", symbol: "H" },
+    { name: "Helium", symbol: "He" },
+    { name: "Lithium", symbol: "Li" },
+    { name: "Beryllium", symbol: "Be" },
+    { name: "Boron", symbol: "B" },
+    { name: "Carbon", symbol: "C" },
+    { name: "Nitrogen", symbol: "N" },
+    { name: "Oxygen", symbol: "O" },
+    { name: "Fluorine", symbol: "F" },
+    { name: "Neon", symbol: "Ne" },
 
-        {
-            question: "What is the chemical symbol for oxygen?",
-            answers: ["O", "Ox", "Og", "C"],
-            correct: 0
-        },
+    { name: "Sodium", symbol: "Na" },
+    { name: "Magnesium", symbol: "Mg" },
+    { name: "Aluminum", symbol: "Al" },
+    { name: "Silicon", symbol: "Si" },
+    { name: "Phosphorus", symbol: "P" },
+    { name: "Sulfur", symbol: "S" },
+    { name: "Chlorine", symbol: "Cl" },
+    { name: "Argon", symbol: "Ar" },
+    { name: "Potassium", symbol: "K" },
+    { name: "Calcium", symbol: "Ca" },
 
-        {
-            question: "What is the atomic number of hydrogen?",
-            answers: ["1", "2", "8", "10"],
-            correct: 0
-        },
+    { name: "Scandium", symbol: "Sc" },
+    { name: "Titanium", symbol: "Ti" },
+    { name: "Vanadium", symbol: "V" },
+    { name: "Chromium", symbol: "Cr" },
+    { name: "Manganese", symbol: "Mn" },
+    { name: "Iron", symbol: "Fe" },
+    { name: "Cobalt", symbol: "Co" },
+    { name: "Nickel", symbol: "Ni" },
+    { name: "Copper", symbol: "Cu" },
+    { name: "Zinc", symbol: "Zn" },
 
-        {
-            question: "What particle has a negative charge?",
-            answers: ["Proton", "Neutron", "Electron", "Nucleus"],
-            correct: 2
-        },
+    { name: "Gallium", symbol: "Ga" },
+    { name: "Germanium", symbol: "Ge" },
+    { name: "Arsenic", symbol: "As" },
+    { name: "Selenium", symbol: "Se" },
+    { name: "Bromine", symbol: "Br" },
+    { name: "Krypton", symbol: "Kr" }
 
-        {
-            question: "What is H₂O commonly known as?",
-            answers: ["Hydrogen peroxide", "Water", "Oxygen", "Salt"],
-            correct: 1
-        },
-
-        {
-            question: "What is the pH of a neutral substance?",
-            answers: ["0", "5", "7", "14"],
-            correct: 2
-        }
-
-    ],
-
-
-    algebra: [
-
-        {
-            question: "What is 2 + 3?",
-            answers: ["4", "5", "6", "7"],
-            correct: 1
-        },
-
-        {
-            question: "What is the slope of y = 3x + 2?",
-            answers: ["2", "3", "5", "1"],
-            correct: 1
-        },
-
-        {
-            question: "What is x if x + 5 = 12?",
-            answers: ["5", "6", "7", "8"],
-            correct: 2
-        },
-
-        {
-            question: "What is the square root of 81?",
-            answers: ["7", "8", "9", "10"],
-            correct: 2
-        },
-
-        {
-            question: "What is the value of 3²?",
-            answers: ["6", "9", "12", "15"],
-            correct: 1
-        }
-
-    ],
-
-
-    history: [
-
-        {
-            question: "Which civilization built the Great Wall of China?",
-            answers: ["Roman", "Chinese", "Greek", "Egyptian"],
-            correct: 1
-        },
-
-        {
-            question: "The Industrial Revolution began in which country?",
-            answers: ["France", "Germany", "Britain", "Spain"],
-            correct: 2
-        },
-
-        {
-            question: "Who was the first emperor of Rome?",
-            answers: ["Julius Caesar", "Augustus", "Nero", "Constantine"],
-            correct: 1
-        },
-
-        {
-            question: "The Silk Roads connected Europe with which region?",
-            answers: ["East Asia", "South America", "Australia", "Antarctica"],
-            correct: 0
-        }
-
-    ],
-
-
-    literature: [
-
-        {
-            question: "What is a metaphor?",
-            answers: [
-                "A direct comparison",
-                "A question",
-                "A rhyme",
-                "A historical event"
-            ],
-            correct: 0
-        },
-
-        {
-            question: "What is the main character of a story called?",
-            answers: [
-                "Antagonist",
-                "Protagonist",
-                "Narrator",
-                "Author"
-            ],
-            correct: 1
-        },
-
-        {
-            question: "What is imagery?",
-            answers: [
-                "Language that creates sensory experiences",
-                "A type of punctuation",
-                "A character",
-                "A plot twist"
-            ],
-            correct: 0
-        }
-
-    ],
-
-
-    entrepreneurship: [
-
-        {
-            question: "What is an entrepreneur?",
-            answers: [
-                "Someone who starts or runs a business",
-                "A government official",
-                "A teacher",
-                "A scientist"
-            ],
-            correct: 0
-        },
-
-        {
-            question: "What is revenue?",
-            answers: [
-                "Money a business earns",
-                "Money a business loses",
-                "The number of employees",
-                "A business's logo"
-            ],
-            correct: 0
-        },
-
-        {
-            question: "What does Excel primarily help with?",
-            answers: [
-                "Spreadsheets and data",
-                "Video editing",
-                "Music recording",
-                "Web browsing"
-            ],
-            correct: 0
-        }
-
-    ],
-
-
-    digital: [
-
-        {
-            question: "What does RGB stand for?",
-            answers: [
-                "Red, Green, Blue",
-                "Red, Gray, Black",
-                "Right, Green, Blue",
-                "Red, Gold, Brown"
-            ],
-            correct: 0
-        },
-
-        {
-            question: "What is a vector graphic?",
-            answers: [
-                "An image made from mathematical paths",
-                "A photograph",
-                "A video",
-                "A sound file"
-            ],
-            correct: 0
-        },
-
-        {
-            question: "What does PNG stand for?",
-            answers: [
-                "Portable Network Graphics",
-                "Personal New Graphic",
-                "Photo Network Grid",
-                "Pixel Number Graphics"
-            ],
-            correct: 0
-        }
-
-    ],
-
-
-    theology: [
-
-        {
-            question: "How many books are in the Bible?",
-            answers: [
-                "66",
-                "70",
-                "73",
-                "80"
-            ],
-            correct: 2
-        },
-
-        {
-            question: "Who is considered the central figure of Christianity?",
-            answers: [
-                "Moses",
-                "Jesus Christ",
-                "Abraham",
-                "David"
-            ],
-            correct: 1
-        },
-
-        {
-            question: "What is the first book of the Bible?",
-            answers: [
-                "Exodus",
-                "Matthew",
-                "Genesis",
-                "Psalms"
-            ],
-            correct: 2
-        }
-
-    ]
-
-};
+];
 
 
 const board = document.getElementById("board");
-const subject = document.getElementById("subject");
+
 const difficulty = document.getElementById("difficulty");
+
 const newGameButton = document.getElementById("newGame");
 
-const mineCountDisplay = document.getElementById("mineCount");
-const scoreDisplay = document.getElementById("score");
-const livesDisplay = document.getElementById("lives");
+const mineCountDisplay =
+    document.getElementById("mineCount");
 
-const questionBox = document.getElementById("questionBox");
-const questionDisplay = document.getElementById("question");
-const answersDisplay = document.getElementById("answers");
-const resultDisplay = document.getElementById("result");
+const scoreDisplay =
+    document.getElementById("score");
+
+const livesDisplay =
+    document.getElementById("lives");
+
+const questionBox =
+    document.getElementById("questionBox");
+
+const questionDisplay =
+    document.getElementById("question");
+
+const answersDisplay =
+    document.getElementById("answers");
+
+const resultDisplay =
+    document.getElementById("result");
 
 
 let rows;
@@ -564,28 +361,35 @@ let cells = [];
 let score = 0;
 let lives = 3;
 
-let questionCell = null;
 let gameOver = false;
+
+let pendingMove = null;
 
 
 function startGame() {
 
     if (difficulty.value === "easy") {
+
         rows = 6;
         columns = 6;
         mines = 6;
+
     }
 
     if (difficulty.value === "medium") {
+
         rows = 8;
         columns = 8;
         mines = 10;
+
     }
 
     if (difficulty.value === "hard") {
+
         rows = 10;
         columns = 10;
         mines = 20;
+
     }
 
 
@@ -604,6 +408,8 @@ function startGame() {
 
     gameOver = false;
 
+    pendingMove = null;
+
 
     board.style.gridTemplateColumns =
         `repeat(${columns}, 45px)`;
@@ -617,21 +423,27 @@ function startGame() {
 
         cell.dataset.index = i;
 
+
         cell.addEventListener("click", function() {
 
-            revealCell(i);
+            attemptMove(i);
 
         });
 
 
         board.appendChild(cell);
 
+
         cells.push({
+
             element: cell,
+
             mine: false,
+
             revealed: false,
-            flagged: false,
+
             number: 0
+
         });
 
     }
@@ -648,10 +460,12 @@ function placeMines() {
 
     let placed = 0;
 
+
     while (placed < mines) {
 
         const randomIndex =
             Math.floor(Math.random() * cells.length);
+
 
         if (!cells[randomIndex].mine) {
 
@@ -678,7 +492,9 @@ function calculateNumbers() {
 
 
         cell.number =
-            neighbors.filter(i => cells[i].mine).length;
+            neighbors.filter(
+                i => cells[i].mine
+            ).length;
 
     });
 
@@ -687,26 +503,44 @@ function calculateNumbers() {
 
 function getNeighbors(index) {
 
-    const row = Math.floor(index / columns);
+    const row =
+        Math.floor(index / columns);
 
-    const column = index % columns;
+    const column =
+        index % columns;
 
     const neighbors = [];
 
 
-    for (let r = row - 1; r <= row + 1; r++) {
+    for (
+        let r = row - 1;
+        r <= row + 1;
+        r++
+    ) {
 
-        for (let c = column - 1; c <= column + 1; c++) {
+        for (
+            let c = column - 1;
+            c <= column + 1;
+            c++
+        ) {
 
             if (
+
                 r >= 0 &&
+
                 r < rows &&
+
                 c >= 0 &&
+
                 c < columns &&
+
                 !(r === row && c === column)
+
             ) {
 
-                neighbors.push(r * columns + c);
+                neighbors.push(
+                    r * columns + c
+                );
 
             }
 
@@ -720,7 +554,12 @@ function getNeighbors(index) {
 }
 
 
-function revealCell(index) {
+/*
+    The player must answer a question
+    before the move happens.
+*/
+
+function attemptMove(index) {
 
     if (gameOver) return;
 
@@ -728,59 +567,61 @@ function revealCell(index) {
 
     if (cell.revealed) return;
 
-    if (cell.mine) {
 
-        cell.element.textContent = "💣";
+    pendingMove = index;
 
-        cell.element.classList.add("mine");
-
-        lives--;
-
-        livesDisplay.textContent = lives;
-
-
-        if (lives <= 0) {
-
-            endGame(false);
-
-        } else {
-
-            showMessage("You hit a mine! You lost a life.");
-
-        }
-
-        return;
-
-    }
-
-
-    cell.revealed = true;
-
-    cell.element.classList.add("revealed");
-
-    cell.element.textContent =
-        cell.number === 0 ? "" : cell.number;
-
-
-    askQuestion(index);
+    showQuestion();
 
 }
 
 
-function askQuestion(index) {
+/*
+    Create a random question using
+    only the first 36 elements.
+*/
 
-    questionCell = index;
+function showQuestion() {
 
-    const questions =
-        questionBanks[subject.value];
+    const element =
+        elements[
+            Math.floor(
+                Math.random() * elements.length
+            )
+        ];
 
 
-    const question =
-        questions[Math.floor(Math.random() * questions.length)];
+    const type =
+        Math.random() < 0.5
+            ? "nameToSymbol"
+            : "symbolToName";
+
+
+    let correctAnswer;
+
+    let questionText;
+
+
+    if (type === "nameToSymbol") {
+
+        questionText =
+            `What is the chemical symbol for ${element.name}?`;
+
+        correctAnswer =
+            element.symbol;
+
+    } else {
+
+        questionText =
+            `Which element has the symbol ${element.symbol}?`;
+
+        correctAnswer =
+            element.name;
+
+    }
 
 
     questionDisplay.textContent =
-        question.question;
+        questionText;
 
 
     answersDisplay.innerHTML = "";
@@ -788,25 +629,35 @@ function askQuestion(index) {
     resultDisplay.textContent = "";
 
 
-    question.answers.forEach((answer, answerIndex) => {
+    const answers =
+        createAnswers(
+            element,
+            type,
+            correctAnswer
+        );
+
+
+    answers.forEach(answer => {
 
         const button =
             document.createElement("button");
-
 
         button.className = "answer";
 
         button.textContent = answer;
 
 
-        button.addEventListener("click", function() {
+        button.addEventListener(
+            "click",
+            function() {
 
-            answerQuestion(
-                answerIndex,
-                question.correct
-            );
+                checkAnswer(
+                    answer,
+                    correctAnswer
+                );
 
-        });
+            }
+        );
 
 
         answersDisplay.appendChild(button);
@@ -819,46 +670,209 @@ function askQuestion(index) {
 }
 
 
-function answerQuestion(selected, correct) {
+/*
+    Creates four possible answers.
+*/
+
+function createAnswers(
+    correctElement,
+    type,
+    correctAnswer
+) {
+
+    const answers = [correctAnswer];
+
+
+    while (answers.length < 4) {
+
+        const randomElement =
+            elements[
+                Math.floor(
+                    Math.random() * elements.length
+                )
+            ];
+
+
+        const answer =
+            type === "nameToSymbol"
+                ? randomElement.symbol
+                : randomElement.name;
+
+
+        if (!answers.includes(answer)) {
+
+            answers.push(answer);
+
+        }
+
+    }
+
+
+    /*
+        Shuffle answers
+    */
+
+    for (
+        let i = answers.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        [
+            answers[i],
+            answers[j]
+        ] =
+        [
+            answers[j],
+            answers[i]
+        ];
+
+    }
+
+
+    return answers;
+
+}
+
+
+/*
+    Check the Chemistry answer.
+*/
+
+function checkAnswer(
+    selected,
+    correct
+) {
 
     if (selected === correct) {
 
         score += 10;
 
-        scoreDisplay.textContent = score;
+        scoreDisplay.textContent =
+            score;
+
 
         resultDisplay.textContent =
-            "✅ Correct! +10 points";
+            "✅ Correct! Make your move.";
+
+
+        setTimeout(() => {
+
+            questionBox.style.display =
+                "none";
+
+
+            if (pendingMove !== null) {
+
+                revealCell(pendingMove);
+
+            }
+
+            pendingMove = null;
+
+        }, 700);
+
 
     } else {
 
         lives--;
 
-        livesDisplay.textContent = lives;
+        livesDisplay.textContent =
+            lives;
+
 
         resultDisplay.textContent =
             "❌ Incorrect! You lost a life.";
 
+
+        if (lives <= 0) {
+
+            setTimeout(() => {
+
+                questionBox.style.display =
+                    "none";
+
+                endGame(false);
+
+            }, 800);
+
+        }
+
     }
 
+}
 
-    setTimeout(() => {
 
-        questionBox.style.display = "none";
+/*
+    Actually reveal the square
+    after the question is answered.
+*/
+
+function revealCell(index) {
+
+    if (gameOver) return;
+
+
+    const cell = cells[index];
+
+
+    if (cell.revealed) return;
+
+
+    if (cell.mine) {
+
+        cell.element.textContent =
+            "💣";
+
+        cell.element.classList.add(
+            "mine"
+        );
+
+
+        lives--;
+
+        livesDisplay.textContent =
+            lives;
 
 
         if (lives <= 0) {
 
             endGame(false);
 
-            return;
+        } else {
+
+            showMessage(
+                "💣 You hit a mine! You lost a life."
+            );
 
         }
 
 
-        checkWin();
+        return;
 
-    }, 900);
+    }
+
+
+    cell.revealed = true;
+
+    cell.element.classList.add(
+        "revealed"
+    );
+
+
+    cell.element.textContent =
+        cell.number === 0
+            ? ""
+            : cell.number;
+
+
+    checkWin();
 
 }
 
@@ -866,11 +880,15 @@ function answerQuestion(selected, correct) {
 function checkWin() {
 
     const safeCells =
-        cells.filter(cell => !cell.mine);
+        cells.filter(
+            cell => !cell.mine
+        );
 
 
     const revealedSafeCells =
-        safeCells.filter(cell => cell.revealed);
+        safeCells.filter(
+            cell => cell.revealed
+        );
 
 
     if (
@@ -894,9 +912,12 @@ function endGame(won) {
 
         if (cell.mine) {
 
-            cell.element.textContent = "💣";
+            cell.element.textContent =
+                "💣";
 
-            cell.element.classList.add("mine");
+            cell.element.classList.add(
+                "mine"
+            );
 
         }
 
@@ -924,13 +945,23 @@ function endGame(won) {
 
 function showMessage(message) {
 
-    resultDisplay.textContent = message;
-
-    questionBox.style.display = "block";
+    resultDisplay.textContent =
+        message;
 
     questionDisplay.textContent = "";
 
     answersDisplay.innerHTML = "";
+
+    questionBox.style.display =
+        "block";
+
+
+    setTimeout(() => {
+
+        questionBox.style.display =
+            "none";
+
+    }, 1200);
 
 }
 
@@ -946,6 +977,7 @@ startGame();
 </script>
 
 </body>
+</html>
 </html>
     <a href="index.html">← Back to Home</a>
 
