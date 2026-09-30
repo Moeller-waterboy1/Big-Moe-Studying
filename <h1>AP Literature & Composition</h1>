@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AP Literature & Composition - Big Moe Studying</title>
+</head>
+
+<body>
+
+    <h1>AP Literature & Composition</h1>
+
+    <p>Welcome to the AP Literature & Composition study page!</p>
+
+    <h2>Study Materials</h2>
+
+    <div>
+        <h3>Class Notes</h3>
+        <p>Your AP Literature & Composition notes will go here.</p>
+    </div>
+
+    <div>
+        <h3>Books & Readings</h3>
+        <p>Keep track of books, stories, poems, and other readings here.</p>
+    </div>
+
+    <div>
+        <h3>Vocabulary</h3>
+        <p>Important literary terms and vocabulary will go here.</p>
+    </div>
+
+    <div>
+        <h3>Essays</h3>
+        <p>Essay ideas, outlines, and resources will go here.</p>
+    </div>
+
+    <div>
+        <h3>Study Guides</h3>
+        <p>Study guides and test preparation will go here.</p>
+    </div>
+
+    <div>
+        <h3>Assignments</h3>
+        <p>Class assignments and important due dates will go here.</p>
+    </div>
+
+    <br>
+
+    <a href="index.html">← Back to Home</a>
+
+</body>
+</html>
