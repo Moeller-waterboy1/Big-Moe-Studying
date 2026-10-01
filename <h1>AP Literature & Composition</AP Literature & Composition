@@ -1,49 +1,671 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AP Literature & Composition - Big Moe Studying</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AP Literature & Composition | Big Moe Studying</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .class-header {
+            background-color: white;
+            color: #001f3f;
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .class-header h1 {
+            color: #001f3f;
+            margin-top: 0;
+        }
+
+        .class-header p {
+            color: #333;
+        }
+
+        .section {
+            background-color: white;
+            color: #001f3f;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .section h2 {
+            color: #001f3f;
+            margin-top: 0;
+        }
+
+        .resource {
+            border: 2px solid #001f3f;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f7f7f7;
+        }
+
+        .resource h3 {
+            color: #001f3f;
+            margin-top: 0;
+        }
+
+        .resource p {
+            color: #333;
+        }
+
+        .gold-button {
+            display: inline-block;
+            background-color: #FFD700;
+            color: #001f3f;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .gold-button:hover {
+            background-color: #001f3f;
+            color: white;
+        }
+
+        .home-button {
+            margin-top: 20px;
+        }
+
+        .ap-badge {
+            display: inline-block;
+            background-color: #001f3f;
+            color: #FFD700;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* AI SECTION */
+
+        .ai-section {
+            background-color: white;
+            color: #001f3f;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .ai-title {
+            color: #001f3f;
+            font-size: 30px;
+            margin-top: 0;
+        }
+
+        .ai-subtitle {
+            color: #444;
+            font-size: 17px;
+        }
+
+        .ai-chat {
+            background-color: #001f3f;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #chatMessages {
+            height: 400px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .user-message {
+            background-color: #FFD700;
+            color: #001f3f;
+            margin-left: 15%;
+        }
+
+        .ai-message {
+            background-color: #eeeeee;
+            color: #001f3f;
+            margin-right: 15%;
+        }
+
+        .ai-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            resize: none;
+            min-height: 50px;
+        }
+
+        #sendButton {
+            background-color: #FFD700;
+            color: #001f3f;
+            border: none;
+            border-radius: 8px;
+            padding: 0 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #sendButton:hover {
+            background-color: white;
+        }
+
+        .ai-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .ai-tool {
+            background-color: white;
+            color: #001f3f;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .ai-tool:hover {
+            background-color: #FFD700;
+        }
+
+        .ai-status {
+            color: white;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .ai-warning {
+            background-color: #fff4b8;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>AP Literature & Composition</h1>
+    <!-- HEADER -->
 
-    <p>Welcome to the AP Literature & Composition study page!</p>
+    <div class="class-header">
 
-    <h2>Study Materials</h2>
+        <div class="ap-badge">
+            AP ENGLISH
+        </div>
 
-    <div>
-        <h3>Class Notes</h3>
-        <p>Your AP Literature & Composition notes will go here.</p>
+        <h1>AP Literature & Composition</h1>
+
+        <p>
+            Welcome to the AP Literature & Composition study page.
+            Review literature, prepare for essays, study vocabulary,
+            practice AP-style analysis, and get help from Big Moe AI.
+        </p>
+
     </div>
 
-    <div>
-        <h3>Books & Readings</h3>
-        <p>Keep track of books, stories, poems, and other readings here.</p>
+
+    <!-- AI TUTOR -->
+
+    <div class="ai-section">
+
+        <h2 class="ai-title">🤖 Big Moe English AI</h2>
+
+        <p class="ai-subtitle">
+            Your personal AP Literature and English tutor.
+            Ask questions about books, writing, literary analysis,
+            essays, poetry, vocabulary, grammar, and AP Literature.
+        </p>
+
+        <div class="ai-chat">
+
+            <div id="chatMessages">
+
+                <div class="message ai-message">
+                    Hi! I'm Big Moe English AI. 📚
+
+                    I can help you with AP Literature, books,
+                    literary analysis, essays, writing, poetry,
+                    grammar, vocabulary, and reading comprehension.
+
+                    You can also paste an essay and ask me to
+                    review it like an AP Literature teacher.
+
+                    What would you like help with?
+                </div>
+
+            </div>
+
+
+            <div class="ai-tools">
+
+                <button class="ai-tool" onclick="setPrompt('Help me analyze a book.')">
+                    📖 Analyze a Book
+                </button>
+
+                <button class="ai-tool" onclick="setPrompt('Help me improve my AP Literature thesis.')">
+                    📝 Improve My Thesis
+                </button>
+
+                <button class="ai-tool" onclick="setPrompt('Review my essay like an AP Literature teacher.')">
+                    ✍️ Review My Essay
+                </button>
+
+                <button class="ai-tool" onclick="setPrompt('Give me an AP Literature practice question.')">
+                    🎯 AP Lit Practice
+                </button>
+
+                <button class="ai-tool" onclick="setPrompt('Explain this literary device to me.')">
+                    🔍 Literary Devices
+                </button>
+
+            </div>
+
+
+            <div class="ai-input-area">
+
+                <textarea
+                    id="userInput"
+                    placeholder="Ask Big Moe English AI something..."
+                    onkeydown="handleEnter(event)"
+                ></textarea>
+
+                <button id="sendButton" onclick="sendMessage()">
+                    Send
+                </button>
+
+            </div>
+
+            <div class="ai-status" id="aiStatus"></div>
+
+        </div>
+
+
+        <div class="ai-warning">
+            💡 Tip: For essay feedback, paste your essay into the chat
+            and tell Big Moe AI what you want it to focus on.
+        </div>
+
     </div>
 
-    <div>
-        <h3>Vocabulary</h3>
-        <p>Important literary terms and vocabulary will go here.</p>
+
+    <!-- CLASS NOTES -->
+
+    <div class="section">
+
+        <h2>📚 Class Notes</h2>
+
+        <div class="resource">
+
+            <h3>Literary Analysis Notes</h3>
+
+            <p>
+                Notes on characterization, symbolism, theme,
+                imagery, tone, diction, irony, narration,
+                and other literary techniques.
+            </p>
+
+            <a class="gold-button" href="#">
+                View Notes →
+            </a>
+
+        </div>
+
     </div>
 
-    <div>
-        <h3>Essays</h3>
-        <p>Essay ideas, outlines, and resources will go here.</p>
+
+    <!-- BOOKS -->
+
+    <div class="section">
+
+        <h2>📖 Books & Readings</h2>
+
+        <div class="resource">
+
+            <h3>The Catcher in the Rye</h3>
+
+            <p>
+                Chapter-by-chapter review, literary analysis,
+                important characters, themes, symbols, and
+                AP Literature practice.
+            </p>
+
+            <a class="gold-button" href="catcherquiz.html">
+                Take the 520-Question Quiz →
+            </a>
+
+        </div>
+
+
+        <div class="resource">
+
+            <h3>Other Class Readings</h3>
+
+            <p>
+                Add additional novels, short stories, poems,
+                and other readings here.
+            </p>
+
+            <a class="gold-button" href="#">
+                View Readings →
+            </a>
+
+        </div>
+
     </div>
 
-    <div>
-        <h3>Study Guides</h3>
-        <p>Study guides and test preparation will go here.</p>
+
+    <!-- VOCABULARY -->
+
+    <div class="section">
+
+        <h2>📝 Vocabulary</h2>
+
+        <div class="resource">
+
+            <h3>AP Literature Vocabulary</h3>
+
+            <p>
+                Study important literary terms and concepts
+                used when analyzing literature.
+            </p>
+
+            <a class="gold-button" href="#">
+                Study Vocabulary →
+            </a>
+
+        </div>
+
     </div>
 
-    <div>
-        <h3>Assignments</h3>
-        <p>Class assignments and important due dates will go here.</p>
+
+    <!-- ESSAYS -->
+
+    <div class="section">
+
+        <h2>✍️ Essays</h2>
+
+        <div class="resource">
+
+            <h3>AP Literary Analysis Essays</h3>
+
+            <p>
+                Practice developing claims, using textual
+                evidence, and explaining how literary choices
+                create meaning.
+            </p>
+
+            <a class="gold-button" href="#">
+                View Essay Resources →
+            </a>
+
+        </div>
+
+
+        <div class="resource">
+
+            <h3>Thesis Practice</h3>
+
+            <p>
+                Practice writing strong, defensible AP Literature
+                thesis statements.
+            </p>
+
+            <a class="gold-button" href="#">
+                Practice Theses →
+            </a>
+
+        </div>
+
     </div>
 
-    <br>
 
+    <!-- STUDY GUIDES -->
+
+    <div class="section">
+
+        <h2>📋 Study Guides</h2>
+
+        <div class="resource">
+
+            <h3>Literary Analysis Study Guide</h3>
+
+            <p>
+                Review the major skills needed for AP Literature,
+                including close reading, literary devices,
+                characterization, and thematic analysis.
+            </p>
+
+            <a class="gold-button" href="#">
+                Open Study Guide →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ASSIGNMENTS -->
+
+    <div class="section">
+
+        <h2>📌 Assignments</h2>
+
+        <div class="resource">
+
+            <h3>Current Assignments</h3>
+
+            <p>
+                Keep track of AP Literature assignments,
+                readings, essays, and upcoming work.
+            </p>
+
+            <a class="gold-button" href="#">
+                View Assignments →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- GAMES -->
+
+    <div class="section">
+
+        <h2>🎮 Games & Practice</h2>
+
+        <div class="resource">
+
+            <h3>The Catcher in the Rye — AP Literature Quiz</h3>
+
+            <p>
+                520 AP-level questions covering all 26 chapters
+                of The Catcher in the Rye. Questions focus on
+                characterization, symbolism, themes, narration,
+                irony, motifs, and literary analysis.
+            </p>
+
+            <a class="gold-button" href="catcherquiz.html">
+                Start Quiz →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- HOME -->
+
+    <div class="home-button">
+
+        <a href="index.html">
+            ← Back to Big Moe Studying
+        </a>
+
+    </div>
+
+
+    <!-- AI JAVASCRIPT -->
+
+    <script>
+
+        function setPrompt(text) {
+
+            document.getElementById("userInput").value = text;
+
+            document.getElementById("userInput").focus();
+
+        }
+
+
+        function handleEnter(event) {
+
+            if (event.key === "Enter" && !event.shiftKey) {
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+
+
+        async function sendMessage() {
+
+            const input = document.getElementById("userInput");
+            const message = input.value.trim();
+
+            if (!message) {
+                return;
+            }
+
+            const chat = document.getElementById("chatMessages");
+            const status = document.getElementById("aiStatus");
+            const sendButton = document.getElementById("sendButton");
+
+
+            // Show user's message
+
+            const userMessage = document.createElement("div");
+
+            userMessage.className = "message user-message";
+
+            userMessage.textContent = message;
+
+            chat.appendChild(userMessage);
+
+
+            input.value = "";
+
+            status.textContent = "Big Moe AI is thinking...";
+
+            sendButton.disabled = true;
+
+
+            try {
+
+                const response = await fetch("/api/chat", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        message: message
+                    })
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error || "Something went wrong."
+                    );
+
+                }
+
+
+                const aiMessage = document.createElement("div");
+
+                aiMessage.className = "message ai-message";
+
+                aiMessage.textContent = data.reply;
+
+                chat.appendChild(aiMessage);
+
+
+                chat.scrollTop = chat.scrollHeight;
+
+
+            } catch (error) {
+
+                const errorMessage = document.createElement("div");
+
+                errorMessage.className = "message ai-message";
+
+                errorMessage.textContent =
+                    "I couldn't connect to Big Moe AI right now. " +
+                    "Make sure the AI server is set up correctly.";
+
+                chat.appendChild(errorMessage);
+
+                console.error(error);
+
+            }
+
+
+            status.textContent = "";
+
+            sendButton.disabled = false;
+
+            input.focus();
+
+        }
+
+    </script>
+
+</body>
+</html>
 <div>
     <h3>📖 The Catcher in the Rye — AP Quiz</h3>
     <p>520 AP Literature questions covering all 26 chapters.</p>
