@@ -43,7 +43,13 @@
     </div>
 
     <br>
+<h2>Games</h2>
 
+<div>
+    <h3>📖 The Catcher in the Rye — AP Quiz</h3>
+    <p>520 AP Literature questions covering all 26 chapters.</p>
+    <a href="catcherquiz.html">Take the Quiz →</a>
+</div>
     <a href="index.html">← Back to Home</a>
 
 </body>
