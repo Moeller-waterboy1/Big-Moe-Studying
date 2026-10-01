@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Design - Big Moe Studying</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+    .page-section {
+        max-width: 1000px;
+        margin: 25px auto;
+    }
+
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+    }
+
+    .card {
+        background: white;
+        color: #001f3f;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 0;
+    }
+
+    .card h3 {
+        color: #001f3f;
+        margin-top: 0;
+    }
+
+    .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    button,
+    .button {
+        border: 0;
+        background: #FFD700;
+        color: #001f3f;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    button:hover,
+    .button:hover {
+        background: white;
+    }
+
+    .danger {
+        background: #e8e8e8;
+    }
+
+    .danger:hover {
+        background: #ffdddd;
+    }
+
+    .items {
+        display: grid;
+        gap: 14px;
+        margin-top: 15px;
+    }
+
+    .item {
+        background: white;
+        color: #001f3f;
+        padding: 18px;
+        border-radius: 12px;
+        text-align: left;
+    }
+
+    .item h3 {
+        margin: 0 0 8px;
+        color: #001f3f;
+    }
+
+    .item p {
+        white-space: pre-wrap;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+    }
+
+    .empty {
+        color: #666;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.65);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        padding: 20px;
+    }
+
+    .modal.open {
+        display: flex;
+    }
+
+    .modal-box {
+        background: white;
+        color: #001f3f;
+        border-radius: 14px;
+        padding: 25px;
+        width: min(600px,100%);
+        max-height: 90vh;
+        overflow: auto;
+        text-align: left;
+    }
+
+    .modal-box h2 {
+        color: #001f3f;
+        margin-top: 0;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin: 13px 0 6px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font: inherit;
+    }
+
+    textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .status {
+        margin: 15px auto;
+        max-width: 900px;
+        padding: 12px;
+        border-radius: 8px;
+        display: none;
+    }
+
+    .status.show {
+        display: block;
+        background: white;
+        color: #001f3f;
+    }
+
+    .artwork-img {
+        max-width: 100%;
+        max-height: 550px;
+        display: block;
+        margin: 12px auto;
+        border-radius: 10px;
+    }
+
+    .small {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .setup {
+        max-width: 900px;
+        margin: 20px auto;
+        background: white;
+        color: #001f3f;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: left;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🎨 Digital Design</h1>
+
+<p>
+    Everything for Digital Design — and now you can manage it directly from the website.
+</p>
+
+<div id="status" class="status"></div>
+
+<!-- SUPABASE SETUP -->
+
+<div id="setupPanel" class="setup">
+
+    <h2>🔧 One-Time Setup</h2>
+
+    <p>
+        Connect this page to your Supabase database so anything you add
+        from the website can be saved online.
+    </p>
+
+    <label for="supabaseUrl">
+        Supabase Project URL
+    </label>
+
+    <input
+        id="supabaseUrl"
+        placeholder="https://your-project.supabase.co"
+    >
+
+    <label for="supabaseKey">
+        Supabase Publishable Key
+    </label>
+
+    <input
+        id="supabaseKey"
+        placeholder="sb_publishable_..."
+    >
+
+    <div class="actions">
+
+        <button onclick="saveConfig()">
+            Connect Website
+        </button>
+
+    </div>
+
+    <p class="small">
+        Use your Supabase publishable/anon key.
+        Do NOT use a secret or service-role key.
+    </p>
+
+</div>
+
+
+<div id="mainContent" class="hidden">
+
+
+    <!-- CLASS NOTES -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                📚 Class Notes
+            </h2>
+
+            <button onclick="openAdd('notes')">
+                + Add Note
+            </button>
+
+        </div>
+
+        <div
+            id="notes"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- ASSIGNMENTS -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                📝 Assignments
+            </h2>
+
+            <button onclick="openAdd('assignments')">
+                + Add Assignment
+            </button>
+
+        </div>
+
+        <div
+            id="assignments"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- STUDY GUIDES -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                📖 Study Guides
+            </h2>
+
+            <button onclick="openAdd('study_guides')">
+                + Add Study Guide
+            </button>
+
+        </div>
+
+        <div
+            id="study_guides"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- VOCABULARY -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                📚 Vocabulary
+            </h2>
+
+            <button onclick="openAdd('vocabulary')">
+                + Add Vocabulary
+            </button>
+
+        </div>
+
+        <div
+            id="vocabulary"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- DESIGN TOOLS -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                🖥️ Design Tools
+            </h2>
+
+            <button onclick="openAdd('tools')">
+                + Add Tool
+            </button>
+
+        </div>
+
+        <div
+            id="tools"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- ARTWORK -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                🎨 My Artwork
+            </h2>
+
+            <button onclick="openAdd('artwork')">
+                + Upload Artwork
+            </button>
+
+        </div>
+
+        <div
+            id="artwork"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- DESIGN PRACTICE -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                🧠 Design Practice
+            </h2>
+
+            <button onclick="openAdd('practice')">
+                + Add Practice
+            </button>
+
+        </div>
+
+        <div
+            id="practice"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- IDEAS -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                💡 Design Ideas & Inspiration
+            </h2>
+
+            <button onclick="openAdd('ideas')">
+                + Add Idea
+            </button>
+
+        </div>
+
+        <div
+            id="ideas"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- COMPLETED PROJECTS -->
+
+    <div class="page-section">
+
+        <div class="section-head">
+
+            <h2>
+                🏆 Completed Projects
+            </h2>
+
+            <button onclick="openAdd('projects')">
+                + Add Project
+            </button>
+
+        </div>
+
+        <div
+            id="projects"
+            class="items">
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM -->
+
+    <div class="page-section">
+
+        <button
+            onclick="resetConfig()"
+            class="danger">
+
+            Disconnect this browser
+
+        </button>
+
+        <a
+            href="index.html"
+            class="button">
+
+            ← Back to Home
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ADD / EDIT WINDOW -->
+
+<div
+    id="modal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2 id="modalTitle">
+            Add Item
+        </h2>
+
+        <input
+            type="hidden"
+            id="editId">
+
+        <input
+            type="hidden"
+            id="editType">
+
+
+        <label for="itemTitle">
+            Title
+        </label>
+
+        <input
+            id="itemTitle"
+            placeholder="Title">
+
+
+        <label for="itemContent">
+            Description / Notes
+        </label>
+
+        <textarea
+            id="itemContent"
+            placeholder="Type what you want to save..."></textarea>
+
+
+        <div id="urlWrap">
+
+            <label for="itemUrl">
+                Link (optional)
+            </label>
+
+            <input
+                id="itemUrl"
+                placeholder="https://...">
+
+        </div>
+
+
+        <div
+            id="fileWrap"
+            class="hidden">
+
+            <label for="itemFile">
+                Artwork Image
+            </label>
+
+            <input
+                id="itemFile"
+                type="file"
+                accept="image/*">
+
+            <p class="small">
+                Upload an image of your Digital Design artwork.
+            </p>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                onclick="closeModal()"
+                class="danger">
+
+                Cancel
+
+            </button>
+
+            <button
+                onclick="saveItem()">
+
+                Save
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/*
+    BIG MOE STUDYING
+    DIGITAL DESIGN DATABASE
+
+    This page uses Supabase.
+
+    Supabase stores:
+
+    • Notes
+    • Assignments
+    • Study guides
+    • Vocabulary
+    • Design tools
+    • Artwork
+    • Practice
+    • Ideas
+    • Projects
+*/
+
+
+let supabaseClient = null;
+
+
+const labels = {
+
+    notes: "Class Note",
+
+    assignments: "Assignment",
+
+    study_guides: "Study Guide",
+
+    vocabulary: "Vocabulary",
+
+    tools: "Design Tool",
+
+    artwork: "Artwork",
+
+    practice: "Practice",
+
+    ideas: "Design Idea",
+
+    projects: "Completed Project"
+
+};
+
+
+
+/* STATUS MESSAGE */
+
+function showStatus(message, error = false) {
+
+    const element =
+        document.getElementById("status");
+
+    element.textContent = message;
+
+    element.style.background =
+        error ? "#ffdede" : "white";
+
+    element.style.color =
+        "#001f3f";
+
+    element.classList.add("show");
+
+    setTimeout(() => {
+
+        element.classList.remove("show");
+
+    }, 5000);
+
+}
+
+
+
+/* SAVE SUPABASE CONNECTION */
+
+function saveConfig() {
+
+    const url =
+        document
+        .getElementById("supabaseUrl")
+        .value
+        .trim();
+
+    const key =
+        document
+        .getElementById("supabaseKey")
+        .value
+        .trim();
+
+
+    if (!url || !key) {
+
+        showStatus(
+            "Enter both your Supabase Project URL and Publishable Key.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "bigMoeSupabaseUrl",
+        url
+    );
+
+    localStorage.setItem(
+        "bigMoeSupabaseKey",
+        key
+    );
+
+
+    location.reload();
+
+}
+
+
+
+/* DISCONNECT */
+
+function resetConfig() {
+
+    localStorage.removeItem(
+        "bigMoeSupabaseUrl"
+    );
+
+    localStorage.removeItem(
+        "bigMoeSupabaseKey"
+    );
+
+    location.reload();
+
+}
+
+
+
+/* INITIALIZE */
+
+async function init() {
+
+    const url =
+        localStorage.getItem(
+            "bigMoeSupabaseUrl"
+        );
+
+    const key =
+        localStorage.getItem(
+            "bigMoeSupabaseKey"
+        );
+
+
+    if (!url || !key) {
+
+        return;
+
+    }
+
+
+    try {
+
+        supabaseClient =
+            window.supabase.createClient(
+                url,
+                key
+            );
+
+
+        document
+            .getElementById("setupPanel")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("mainContent")
+            .classList.remove("hidden");
+
+
+        await loadAll();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "Could not connect to Supabase. Check your settings.",
+            true
+        );
+
+    }
+
+}
+
+
+
+/* LOAD EVERYTHING */
+
+async function loadAll() {
+
+    const { data, error } =
+        await supabaseClient
+
+            .from("digital_design_items")
+
+            .select("*")
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        showStatus(
+            "Could not load your saved content. Check your Supabase setup.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    Object.keys(labels).forEach(type => {
+
+        const container =
+            document.getElementById(type);
+
+        const rows =
+            data.filter(
+                item =>
+                    item.item_type === type
+            );
+
+
+        container.innerHTML = "";
+
+
+        if (!rows.length) {
+
+            container.innerHTML = `
+
+                <div class="item empty">
+
+                    Nothing added yet.
+                    Click “+ Add” to put something here.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        rows.forEach(renderItem);
+
+    });
+
+}
+
+
+
+/* DISPLAY ITEM */
+
+function renderItem(item) {
+
+    const container =
+        document.getElementById(
+            item.item_type
+        );
+
+
+    const div =
+        document.createElement("div");
+
+
+    div.className = "item";
+
+
+    let extra = "";
+
+
+    /* ARTWORK */
+
+    if (
+        item.item_type === "artwork"
+        &&
+        item.file_url
+    ) {
+
+        extra = `
+
+            <img
+
+                src="${escapeAttr(item.file_url)}"
+
+                alt="${escapeAttr(
+                    item.title || "Artwork"
+                )}"
+
+                class="artwork-img"
+
+            >
+
+        `;
+
+    }
+
+
+    /* LINK */
+
+    if (item.url) {
+
+        extra += `
+
+            <p>
+
+                <a
+
+                    href="${escapeAttr(item.url)}"
+
+                    target="_blank"
+
+                    rel="noopener noreferrer"
+
+                    class="button">
+
+                    Open Link →
+
+                </a>
+
+            </p>
+
+        `;
+
+    }
+
+
+    div.innerHTML = `
+
+        <h3>
+
+            ${escapeHtml(
+                item.title ||
+                labels[item.item_type]
+            )}
+
+        </h3>
+
+
+        ${
+            item.content
+
+            ?
+
+            `<p>
+                ${escapeHtml(item.content)}
+            </p>`
+
+            :
+
+            ""
+        }
+
+
+        ${extra}
+
+
+        <div class="actions">
+
+            <button
+                onclick='editItem(${JSON.stringify(item)})'>
+
+                Edit
+
+            </button>
+
+
+            <button
+
+                class="danger"
+
+                onclick="deleteItem(
+                    '${item.id}',
+                    '${item.item_type}',
+                    '${escapeAttr(
+                        item.file_path || ""
+                    )}'
+                )">
+
+                Delete
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    container.appendChild(div);
+
+}
+
+
+
+/* OPEN ADD WINDOW */
+
+function openAdd(type) {
+
+    document
+        .getElementById("editId")
+        .value = "";
+
+
+    document
+        .getElementById("editType")
+        .value = type;
+
+
+    document
+        .getElementById("itemTitle")
+        .value = "";
+
+
+    document
+        .getElementById("itemContent")
+        .value = "";
+
+
+    document
+        .getElementById("itemUrl")
+        .value = "";
+
+
+    document
+        .getElementById("itemFile")
+        .value = "";
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+            `Add ${labels[type]}`;
+
+
+    document
+        .getElementById("fileWrap")
+        .classList
+        .toggle(
+            "hidden",
+            type !== "artwork"
+        );
+
+
+    document
+        .getElementById("urlWrap")
+        .classList
+        .toggle(
+            "hidden",
+            type === "artwork"
+        );
+
+
+    document
+        .getElementById("modal")
+        .classList
+        .add("open");
+
+}
+
+
+
+/* EDIT ITEM */
+
+function editItem(item) {
+
+    document
+        .getElementById("editId")
+        .value = item.id;
+
+
+    document
+        .getElementById("editType")
+        .value = item.item_type;
+
+
+    document
+        .getElementById("itemTitle")
+        .value = item.title || "";
+
+
+    document
+        .getElementById("itemContent")
+        .value = item.content || "";
+
+
+    document
+        .getElementById("itemUrl")
+        .value = item.url || "";
+
+
+    document
+        .getElementById("itemFile")
+        .value = "";
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+            `Edit ${labels[item.item_type]}`;
+
+
+    document
+        .getElementById("fileWrap")
+        .classList
+        .toggle(
+            "hidden",
+            item.item_type !== "artwork"
+        );
+
+
+    document
+        .getElementById("urlWrap")
+        .classList
+        .toggle(
+            "hidden",
+            item.item_type === "artwork"
+        );
+
+
+    document
+        .getElementById("modal")
+        .classList
+        .add("open");
+
+}
+
+
+
+/* CLOSE WINDOW */
+
+function closeModal() {
+
+    document
+        .getElementById("modal")
+        .classList
+        .remove("open");
+
+}
+
+
+
+/* SAVE ITEM */
+
+async function saveItem() {
+
+    const id =
+        document
+        .getElementById("editId")
+        .value;
+
+
+    const type =
+        document
+        .getElementById("editType")
+        .value;
+
+
+    const title =
+        document
+        .getElementById("itemTitle")
+        .value
+        .trim();
+
+
+    const content =
+        document
+        .getElementById("itemContent")
+        .value
+        .trim();
+
+
+    const url =
+        document
+        .getElementById("itemUrl")
+        .value
+        .trim();
+
+
+    const file =
+        document
+        .getElementById("itemFile")
+        .files[0];
+
+
+    if (!title) {
+
+        showStatus(
+            "Please enter a title.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if (!supabaseClient) {
+
+        showStatus(
+            "Connect Supabase first.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    let fileUrl = null;
+
+    let filePath = null;
+
+
+
+    /* UPLOAD ARTWORK */
+
+    if (file) {
+
+        if (!file.type.startsWith("image/")) {
+
+            showStatus(
+                "Please choose an image file.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        const safeName =
+            file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                "-"
+            );
+
+
+        filePath =
+            `${crypto.randomUUID()}-${safeName}`;
+
+
+        const { error: uploadError } =
+            await supabaseClient
+
+                .storage
+
+                .from("digital-design")
+
+                .upload(
+                    filePath,
+                    file,
+                    {
+                        cacheControl: "3600",
+                        upsert: false,
+                        contentType: file.type
+                    }
+                );
+
+
+        if (uploadError) {
+
+            console.error(uploadError);
+
+            showStatus(
+                "Artwork upload failed. Check your Storage setup.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        const { data } =
+            supabaseClient
+
+                .storage
+
+                .from("digital-design")
+
+                .getPublicUrl(
+                    filePath
+                );
+
+
+        fileUrl =
+            data.publicUrl;
+
+    }
+
+
+
+    /* EDIT */
+
+    if (id) {
+
+        const updateData = {
+
+            title,
+
+            content,
+
+            url:
+                type === "artwork"
+                ? null
+                : url
+
+        };
+
+
+        if (fileUrl) {
+
+            updateData.file_url =
+                fileUrl;
+
+            updateData.file_path =
+                filePath;
+
+        }
+
+
+        const { error } =
+            await supabaseClient
+
+                .from(
+                    "digital_design_items"
+                )
+
+                .update(
+                    updateData
+                )
+
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error) {
+
+            console.error(error);
+
+            showStatus(
+                "Could not update the item.",
+                true
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    /* NEW ITEM */
+
+    else {
+
+        const { error } =
+            await supabaseClient
+
+                .from(
+                    "digital_design_items"
+                )
+
+                .insert({
+
+                    item_type: type,
+
+                    title,
+
+                    content,
+
+                    url:
+                        type === "artwork"
+                        ? null
+                        : url,
+
+                    file_url:
+                        fileUrl,
+
+                    file_path:
+                        filePath
+
+                });
+
+
+        if (error) {
+
+            console.error(error);
+
+            showStatus(
+                "Could not save the item.",
+                true
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    closeModal();
+
+    await loadAll();
+
+    showStatus("Saved!");
+
+}
+
+
+
+/* DELETE */
+
+async function deleteItem(
+    id,
+    type,
+    filePath
+) {
+
+    if (
+        !confirm(
+            "Delete this item?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const { error } =
+        await supabaseClient
+
+            .from(
+                "digital_design_items"
+            )
+
+            .delete()
+
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        showStatus(
+            "Could not delete the item.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if (filePath) {
+
+        await supabaseClient
+
+            .storage
+
+            .from("digital-design")
+
+            .remove([
+                filePath
+            ]);
+
+    }
+
+
+    await loadAll();
+
+    showStatus("Deleted.");
+
+}
+
+
+
+/* SECURITY HELPERS */
+
+function escapeHtml(value) {
+
+    return String(value).replace(
+        /[&<>"']/g,
+
+        character => ({
+
+            "&": "&amp;",
+
+            "<": "&lt;",
+
+            ">": "&gt;",
+
+            '"': "&quot;",
+
+            "'": "&#039;"
+
+        }[character])
+
+    );
+
+}
+
+
+function escapeAttr(value) {
+
+    return escapeHtml(value);
+
+}
+
+
+
+/* CLOSE MODAL WHEN CLICKING OUTSIDE */
+
+window.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target.id === "modal"
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+
+/* START */
+
+init();
+
+</script>
+
+</body>
+</html>
