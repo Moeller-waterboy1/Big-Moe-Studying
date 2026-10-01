@@ -66,11 +66,11 @@ h1{color:#ffd700;font-size:42px;margin:10px}.sub{margin-bottom:18px}
 <div class="tabs"><button class="tab active" data-game="terms">Chemistry Terms</button><button class="tab" data-game="elements">Elements</button></div>
 
 <div id="terms" class="game active"><div class="daily"><b>CHEMISTRY TERMS</b><br>Guess today's 5-letter chemistry word.</div>
-<div id="termsBoard" class="board"></div><div id="termsMessage" class="message"></div><div id="termsKeyboard" class="keyboard"></div>
+<input id="termsInput" autocomplete="off" autocapitalize="characters" inputmode="text" maxlength="5" aria-label="Chemistry term guess" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"><div id="termsBoard" class="board"></div><div id="termsMessage" class="message"></div><div id="termsKeyboard" class="keyboard"></div>
 <button class="action" id="termsNew">New Game</button><button class="action" id="termsExplain">Explanation</button><div id="termsExplainBox" class="explain"></div></div>
 
 <div id="elements" class="game"><div class="daily"><b>ELEMENTS</b><br>Guess today's 5-letter element name.</div>
-<div id="elementsBoard" class="board"></div><div id="elementsMessage" class="message"></div><div id="elementsKeyboard" class="keyboard"></div>
+<input id="elementsInput" autocomplete="off" autocapitalize="characters" inputmode="text" maxlength="5" aria-label="Element guess" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0"><div id="elementsBoard" class="board"></div><div id="elementsMessage" class="message"></div><div id="elementsKeyboard" class="keyboard"></div>
 <button class="action" id="elementsNew">New Game</button><button class="action" id="elementsExplain">Explanation</button><div id="elementsExplainBox" class="explain"></div></div>
 <a class="back" href="chemistry.html">← Back to Chemistry</a>
 
@@ -88,27 +88,61 @@ const elementAnswers=[
 function dayIndex(n,offset){const d=new Date();const day=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);return(day+offset)%n}
 function game(kind,answers,offset){
  const board=document.getElementById(kind+"Board"),msg=document.getElementById(kind+"Message"),kb=document.getElementById(kind+"Keyboard"),box=document.getElementById(kind+"ExplainBox");
- const [answer,definition]=answers[dayIndex(answers.length,offset)];let guesses=[],cur="",over=false;
+ const [answer,definition]=answers[dayIndex(answers.length,offset)];let guesses=[],cur="",over=false; const input=document.getElementById(kind+"Input");
  const allowed=new Set(answers.map(x=>x[0]));
  function build(){board.innerHTML="";for(let r=0;r<6;r++){let row=document.createElement("div");row.className="row";for(let c=0;c<5;c++){let x=document.createElement("div");x.className="cell";row.appendChild(x)}board.appendChild(row)}
  kb.innerHTML="";["QWERTYUIOP","ASDFGHJKL","ZXCVBNM"].forEach((letters,i)=>{let row=document.createElement("div");row.className="keyrow";if(i===2)key("ENTER",row);for(const l of letters)key(l,row);if(i===2)key("⌫",row);kb.appendChild(row)})}
- function key(label,row){let b=document.createElement("button");b.className="key"+(label.length>1?" wide":"");b.textContent=label;b.onclick=()=>press(label==="⌫"?"BACK":label==="ENTER"?"ENTER":label.toLowerCase());row.appendChild(b)}
+ function key(label,row){let b=document.createElement("button");b.type="button";b.className="key"+(label.length>1?" wide":"");b.textContent=label;b.onclick=()=>press(label==="⌫"?"BACK":label==="ENTER"?"ENTER":label.toLowerCase());row.appendChild(b)}
  function draw(){[...board.children].forEach((r,ri)=>[...r.children].forEach((x,ci)=>x.textContent=(guesses[ri]?.[ci]||cur[ci]||"").toUpperCase())}
  function submit(){if(cur.length!==5){msg.textContent="Enter 5 letters.";return}if(!allowed.has(cur)&&cur!==answer){msg.textContent="Use a chemistry word from this game's list.";return}
   guesses.push(cur);let a=answer.split(""),res=Array(5).fill("absent");for(let i=0;i<5;i++)if(cur[i]===answer[i]){res[i]="correct";a[i]=null}
   for(let i=0;i<5;i++)if(res[i]!=="correct"){let j=a.indexOf(cur[i]);if(j>=0){res[i]="present";a[j]=null}}
   res.forEach((v,i)=>board.children[guesses.length-1].children[i].classList.add(v));cur="";
   if(guesses.at(-1)===answer){over=true;msg.textContent="🎉 Correct! "+guesses.length+"/6"}else if(guesses.length===6){over=true;msg.textContent="Answer: "+answer.toUpperCase()}else msg.textContent="";draw()}
- function press(k){if(over)return;if(k==="BACK")cur=cur.slice(0,-1);else if(k==="ENTER")submit();else if(/^[a-z]$/.test(k)&&cur.length<5)cur+=k;draw()}
- addEventListener("keydown",e=>{if(!document.getElementById(kind).classList.contains("active"))return;if(e.key==="Enter")press("ENTER");else if(e.key==="Backspace")press("BACK");else if(/^[a-z]$/i.test(e.key))press(e.key.toLowerCase())});
- document.getElementById(kind+"New").onclick=()=>{guesses=[];cur="";over=false;msg.textContent="";box.style.display="none";build();draw()};
+ function press(k){
+  if(over)return;
+  if(k==="BACK")cur=cur.slice(0,-1);
+  else if(k==="ENTER")submit();
+  else if(/^[a-z]$/.test(k)&&cur.length<5)cur+=k;
+  if(input)input.value=cur.toUpperCase();
+  draw();
+}
+input.addEventListener("input",()=>{
+  if(over){input.value="";return}
+  cur=input.value.toLowerCase().replace(/[^a-z]/g,"").slice(0,5);
+  input.value=cur.toUpperCase();
+  draw();
+});
+input.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){e.preventDefault();submit();input.value=cur.toUpperCase()}
+  else if(e.key==="Backspace"){e.preventDefault();cur=cur.slice(0,-1);input.value=cur.toUpperCase();draw()}
+});
+ document.addEventListener("keydown",e=>{
+  const active=document.getElementById(kind).classList.contains("active");
+  if(!active)return;
+  if(e.key==="Enter"){e.preventDefault();press("ENTER")}
+  else if(e.key==="Backspace"){e.preventDefault();press("BACK")}
+  else if(/^[a-zA-Z]$/.test(e.key)){e.preventDefault();press(e.key.toLowerCase())}
+});
+kb.addEventListener("click",e=>{
+  const b=e.target.closest(".key");
+  if(!b)return;
+  const label=b.textContent;
+  press(label==="⌫"?"BACK":label==="ENTER"?"ENTER":label.toLowerCase());
+});
+ document.getElementById(kind+"New").onclick=()=>{guesses=[];cur="";over=false;msg.textContent="";box.style.display="none";build();draw();
+document.getElementById(kind).addEventListener("click",()=>{
+  if(!over)input.focus();
+});};
  document.getElementById(kind+"Explain").onclick=()=>{box.style.display=box.style.display==="none"?"block":"none";box.innerHTML="<b>"+answer.toUpperCase()+"</b><br>"+definition};
- build();draw()
+ build();draw();
+document.getElementById(kind).addEventListener("click",()=>{
+  if(!over)input.focus();
+});
 }
 game("terms",termAnswers,0);game("elements",elementAnswers,7);
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".game").forEach(x=>x.classList.remove("active"));t.classList.add("active");document.getElementById(t.dataset.game).classList.add("active")});
 </script></body></html>
-    <br>
 </div>
     <!DOCTYPE html>
 <html>
